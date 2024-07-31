@@ -43,27 +43,48 @@ func (r Repository) List(ctx context.Context) ([]domain.Products, error) {
 	return products, nil
 }
 
-// Id
-// Name
-// Price
-// Seller
-// CreatedAt
-// UpdatedAt
+func (r Repository) Create(ctx context.Context, product domain.Products) error {
+	stmt, err := r.DB.Prepare(`
+		INSERT INTO products (
+			"name",
+			"price",
+			"quantity"
+		)
+		VALUES (?, ?, ?)
+		RETURNING id;
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-// func (r Repository) Create(ctx context.Context, Product domain.Products) error {
-// 	rows, err := r.DB.QueryContext(ctx, `
-// 		INSERT INTO products (
-// 			name,
-// 			price,
-// 			seller
-// 		)
-// 		VALUES ( ?, ?, ?)
-// 		RETURNING id;
-// 	`, Product.Name, Product.Price, Product.Seller)
-// 	return nil
-// }
+	if _, err := stmt.Exec(product.Name, product.Price, product.Seller); err != nil {
+		log.Fatal(err)
+	}
 
-func (r Repository) Update() error {
+	return nil
+}
+
+func (r Repository) Update(ctx context.Context, productToUpdate domain.Products) error {
+	result, err := r.DB.ExecContext(ctx, `
+		UPDATE 
+			products 
+		SET 
+			name = ?,
+			price = ?
+		WHERE 
+			id = ?;
+	`, productToUpdate.Name, productToUpdate.Price, productToUpdate.Id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	rows, err := result.RowsAffected()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if rows != 1 {
+		log.Fatalf("expected to affect 1 row, affected %d", rows)
+	}
+
 	return nil
 }
 
