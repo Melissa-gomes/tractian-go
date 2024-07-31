@@ -1,8 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-SELECT 'up SQL query';
--- +goose StatementEnd
-CREATE TABLE "sellers" (
+CREATE TABLE "sales" (
     "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
     "product_id" uuid NOT NULL,
     "seller_id" uuid NOT NULL,
@@ -14,10 +12,9 @@ CREATE TABLE "sellers" (
     "created_at" timestamptz NOT NULL DEFAULT (now()),
     "updated_at" timestamptz NOT NULL DEFAULT (now())
 )
-
+-- +goose StatementEnd
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
 
-DROP TABLE IF EXISTS sellers;
+DROP TABLE IF EXISTS sales;
 -- +goose StatementEnd

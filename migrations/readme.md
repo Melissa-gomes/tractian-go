@@ -9,7 +9,7 @@ alias goose="$HOME/.goose/bin/goose"
 `goose --dir migrations/ create MIGRATION-NAME sql`
 
 ### Up migrations
-`goose --dir migrations/ postgres "postgresql://${postgres_user}:${postgres_password}@${postgres_host}:${postgres_port}/${postgres_db_name}?sslmode=${postgres_sslmode}` up
+`goose --dir migrations/ postgres "postgresql://${postgres_user}:${postgres_password}@${postgres_host}:${postgres_port}/${postgres_db_name}?sslmode=${postgres_sslmode}" up`
 
 ### Down migrations
 `goose --dir migrations/ postgres "postgresql://${postgres_user}:${postgres_password}@${postgres_host}:${postgres_port}/${postgres_db_name}?sslmode=${postgres_sslmode}` down
